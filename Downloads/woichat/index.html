@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="src/output.css" rel="stylesheet" />
+    <link rel="stylesheet" href="src/input.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav
+      class="w-full bg-white shadow px-4 py-2 flex justify-between items-center"
+    >
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-lg"
+          >Woi<span class="font-bold">Chat</span></span
+        >
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <i class="bx bx-bell text-2xl"></i>
+        <img
+          src="https://dummyimage.com/40x40/000/fff"
+          alt="User"
+          class="w-8 h-8 rounded-full object-cover"
+        />
+        <span class="hidden sm:block font-medium">MipanZu</span>
+        <i class="bx bx-chevron-down"></i>
+      </div>
+    </nav>
+
+    <!-- Todo Demo -->
+     <div class="justify-center text-center mt-10">
+    <ul id="messages"></ul>
+    <input class="p-2 rounded-2xl" id="msg" autocomplete="off" placeholder="Ketik Woi..." />
+    <button style="cursor: pointer" class="styleBtn" id="sendBtn">Kirim</button>
+      </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+      const validasi = 200;
+      const socket = io("http://localhost:5000");
+
+      socket.on("connect", () => {
+        console.log(`Connect to server status ${validasi}`);
+      });
+
+      socket.on("message", (msg) => {
+        const li = document.createElement("li");
+        li.innerText = msg;
+        document.getElementById("messages").appendChild(li);
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("sendBtn")
+
+        btn.addEventListener("click", () => {
+          const input = document.getElementById("msg");
+          if (input.value.trim() !== "") {
+            socket.send(input.value);
+            input.value = "";
+          }
+        });
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="connected.js"></script>
+  </body>
+</html>
